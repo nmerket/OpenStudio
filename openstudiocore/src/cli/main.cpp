@@ -154,7 +154,9 @@ int main(int argc, char *argv[])
   ruby_set_argv(argc - 1,argv + 1);
   //rubyInterpreter.evalString(R"(require 'irb')");
   //rubyInterpreter.evalString(R"(IRB.start)");
-  rubyInterpreter.evalString(R"(require 'openstudio_cli')");
+  rubyInterpreter.evalString(R"(require 'securerandom')");
+  //rubyInterpreter.evalString(R"(require 'openstudio-workflow')");
+  //rubyInterpreter.evalString(R"(require 'openstudio_cli')");
 }
 
 extern "C" {

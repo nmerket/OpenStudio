@@ -594,8 +594,6 @@ endif()
 
 if( UNIX )
   ExternalProject_Add(Ruby
-    URL https://openstudio-resources.s3.amazonaws.com/dependencies/ruby-2.2.0.tar.gz
-    URL_MD5 d4d8b600af2f77566515728d5bd7ffa4
     BUILD_IN_SOURCE 1
     CONFIGURE_COMMAND autoconf && sh -c "./configure --with-static-linked-ext --without-gmp --without-tcl --without-tk --disable-install-doc --prefix=${CMAKE_BINARY_DIR}/Ruby-prefix/src/Ruby-install"
     BUILD_COMMAND $(MAKE) libenc; $(MAKE) libtrans; $(MAKE)
@@ -611,18 +609,21 @@ else()
   # This will require bison, sed, and at least ruby 1.8 in your path
   # Consider minsys even though the build will be done by msvc the ruby build system uses some traditionally unix tools
   ExternalProject_Add(Ruby
-    URL https://openstudio-resources.s3.amazonaws.com/dependencies/ruby-2.2.0.tar.gz
-    URL_MD5 d4d8b600af2f77566515728d5bd7ffa4
+	  #URL https://openstudio-resources.s3.amazonaws.com/dependencies/ruby-2.2.0.tar.gz
+    #URL_MD5 d4d8b600af2f77566515728d5bd7ffa4
+    GIT_REPOSITORY https://github.com/oneclick/rubyinstaller.git
+    GIT_TAG master
     BUILD_IN_SOURCE 1
-    CONFIGURE_COMMAND .\\win32\\configure.bat --with-static-linked-ext --without-win32ole --disable-install-doc --prefix=${CMAKE_BINARY_DIR}/Ruby-prefix/src/Ruby-install
-    BUILD_COMMAND nmake libenc && nmake libtrans && nmake
+    #CONFIGURE_COMMAND .\\win32\\configure.bat --with-static-linked-ext --without-win32ole --disable-install-doc --prefix=${CMAKE_BINARY_DIR}/Ruby-prefix/src/Ruby-install
+    CONFIGURE_COMMAND ""
+    BUILD_COMMAND rake ruby22 DKVER=mingw64-64-4.7.2
     INSTALL_COMMAND nmake install
   )
-  set(RUBY_LIBRARY "${CMAKE_BINARY_DIR}/Ruby-prefix/src/Ruby-install/lib/x64-msvcr120-ruby220-static.lib")
-  set(RUBY_INCLUDE_DIR "${CMAKE_BINARY_DIR}/Ruby-prefix/src/Ruby-install/include/ruby-2.2.0")
-  set(RUBY_CONFIG_INCLUDE_DIR "${CMAKE_BINARY_DIR}/Ruby-prefix/src/Ruby-install/include/ruby-2.2.0/x64-mswin64_120")
-  set(RUBY_EXECUTABLE "${CMAKE_BINARY_DIR}/Ruby-prefix/src/Ruby-install/bin/ruby")
-  set(RUBY_SOURCE_DIR "${CMAKE_BINARY_DIR}/Ruby-prefix/src/Ruby")
+  set(RUBY_LIBRARY "${CMAKE_BINARY_DIR}/Ruby-prefix/src/Ruby/sandbox/ruby22_build/libmsvcrt-ruby200-static.a")
+  set(RUBY_INCLUDE_DIR "${CMAKE_BINARY_DIR}/Ruby-prefix/src/Ruby/sandbox/ruby_2_2/include")
+  set(RUBY_CONFIG_INCLUDE_DIR "${CMAKE_BINARY_DIR}/Ruby-prefix/src/Ruby/sandbox/ruby22_mingw/include/ruby-2.2.0/x64-mingw32")
+  set(RUBY_EXECUTABLE "${CMAKE_BINARY_DIR}/Ruby-prefix/src/Ruby/sandbox/ruby22_build/ruby.exe")
+  set(RUBY_SOURCE_DIR "${CMAKE_BINARY_DIR}/Ruby-prefix/src/Ruby/sandbox/ruby_2_2")
 endif()
 
 # make this cross platform
